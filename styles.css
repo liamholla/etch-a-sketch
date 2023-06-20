@@ -1,13 +1,31 @@
-.main-body {
+body{
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.main-body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-body {
+  height: 800px;
+  width: 800px;
   display: flex;
   flex-wrap: wrap;
 }
 
 .grid-box {
-    flex-grow: 1;
+    /*width: calc(100vw /11); /*This is going to be edited in JS */
+    aspect-ratio: 1/1;
+    height: auto;
+    box-sizing: border-box;
     border: 1px;
-    border-color: black;
-    border-style: solid;
-    height: 100px;
-    
+    border-color: rgb(161, 161, 161);
+    border-style: dotted;
+}
+
+.grid-box-hover {
+    background-color: rgb(23, 23, 99);
 }
