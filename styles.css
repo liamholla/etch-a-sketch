@@ -22,8 +22,8 @@ body{
     height: auto;
     box-sizing: border-box;
     border: 1px;
-    border-color: rgb(161, 161, 161);
-    border-style: dotted;
+    border-color: rgb(236, 236, 236);
+    border-style: solid;
 }
 
 .grid-box-hover {
