@@ -6,12 +6,11 @@ let x2 = x*x;
 
 console.log(x);
 
-
 // Select the grid body
 const mainBodyDiv = document.querySelector('.grid-body');
 // console.log(mainBodyDiv);
 
-//The intial grid size which can be changed
+//The initial grid size which can be changed
 for (let i = 1; i < (x2+1); i++) {
     const newDiv = document.createElement("div");
     newDiv.classList.add("grid-box");
@@ -36,57 +35,76 @@ function updateGridSize(newX) {
         newDiv.classList.add("grid-box");
         newDiv.id = `${i}`;
         mainBodyDiv.appendChild(newDiv);
-    }
+        newDiv.style.height = `calc(60vh / ${x})`;
+    } };
 
-    // Select all the grid objects that I want to track
-    const trackGrids = document.querySelectorAll(".grid-box");
-    // console.log(trackGrids);
+// We want to only turn on the paint when the user clicks
+const gridBodyDiv = document.querySelector(".grid-body");
+let gridClickCount = 1;
 
-    //For each grid object we want to apply a colour to the background after the mouse
-    //passes over
-    trackGrids.forEach ( function(grid) {
+// Create a function to call based on mouseenter
+const gridMouseEnterListener = function(event) {
 
-        //We are making the size of the grid dynamic
-        grid.style.width = `calc(800px / ${x})`;
+        //retrieve the current opacity of the grid. If NaN then 0
+        let opacity = Number(event.target.style.opacity) || 0;
+        opacity = opacity + 0.1;
 
-        let gridPaint = 0;
-
-        grid.addEventListener('mouseenter', function(event) {
-        
         // set the color to fade in after 0.2s
         event.target.style.transition = "background-color 0.2s";
         event.target.style.backgroundColor = "purple";
 
-        //Let's make the opacity increase every time the users hovers over a grid
-
-        gridPaint++;
-
-        if(gridPaint > 10) {
-            gridPaint = 10
+        //Set the maximum opacity to be 1
+        if(opacity > 1) {
+            opacity = 1
         }
-        console.log(gridPaint)
 
-        event.target.style.opacity = gridPaint/10;
+        // Assign the value of opacity to the CSS property
+        event.target.style.opacity = opacity;
 
-        /* Optional fading effect
-        //reset the colour after a short delay(500ms)
-        setTimeout(() => {
-            event.target.style.transition = "background-color 2s";
-            event.target.style.backgroundColor ="";
-        }, 500);
-        */
-    }
-    ,false);
+    };
+
+// Only start listening to the mouse enter after an 'even' number of clicks
+gridBodyDiv.addEventListener("click", function() {
+   
+//We want to turn the colour on and off depending on clicks
+gridClickCount++;
+
+// Select all the grid objects that I want to track
+const trackGrids = document.querySelectorAll(".grid-box");
+
+//Turn on the grid after even clicks
+  if ((gridClickCount % 2) === 0) {
+    console.log("The div has been clicked on!")
+    gridBodyDiv.style.borderWidth = "4px"
+    gridBodyDiv.style.borderColor = "var(--myPurple)"
+    gridBodyDiv.style.margin = "18px"
+
+    trackGrids.forEach(function(grid) {
+        
+      grid.addEventListener('mouseenter', gridMouseEnterListener,false);
+      
+    });
+  } else {  // Turn off after odd clicks
+    console.log("The div has been clicked off!")
+    gridBodyDiv.style.borderWidth = "2px"
+    gridBodyDiv.style.borderColor = "black"
+    gridBodyDiv.style.margin = "20px"
+
+    trackGrids.forEach(function(grid) {
+              
+      grid.removeEventListener('mouseenter', gridMouseEnterListener);
+      
+    })
+};
 })
 
-}
 
 // This allows the user to play the game from the start
 updateGridSize(x);
 
 //We need to get the value that is in the number box
 const gridSizeNumber = document.getElementById("grid-size-id");
-gridSizeNumber.max = "50";
+gridSizeNumber.max = "100";
 
 // Look for the button
 const applyButton = document.querySelector("#grid-size")
@@ -96,9 +114,9 @@ gridSizeNumber.addEventListener("input",function(event) {
     let newX = Number(event.target.value)
     console.log(newX);
     
-    // stop users from entering over 50
-    if (newX > 50) {
-        newX = 50;
+    // stop users from entering over 100
+    if (newX > 100) {
+        newX = 100;
     }
 
     //It now works when the user presses "Enter"
